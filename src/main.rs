@@ -1,5 +1,6 @@
 use axum::ServiceExt;
 use hyper::{service::service_fn, Body, Request, Response, Server};
+use std::env;
 use std::net::SocketAddr;
 use tower::ServiceBuilder;
 
@@ -18,8 +19,11 @@ async fn main() {
 }
 
 async fn forward_request(req: Request<Body>) -> Result<Response<Body>, hyper::Error> {
+    // Get the environment variable
+    let proxy_host = env::var("PROXY_HOST").unwrap();
+
     // Set target API URL
-    let target_url = format!("https://api-m.paypal.com{}", req.uri());
+    let target_url = format!("https://{proxy_host}{}", req.uri());
 
     // Prepare the request using reqwest
     let client = reqwest::Client::new();
