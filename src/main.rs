@@ -57,5 +57,7 @@ async fn forward_request(req: Request<Body>) -> Result<Response<Body>, hyper::Er
     let res_bytes = res.bytes().await.unwrap();
     let response = response.body(Body::from(res_bytes)).unwrap();
 
+    println!("Proxied response: {:?}", response);
+
     Ok(response)
 }
